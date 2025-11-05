@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,24 +13,84 @@ import SearchResults from './pages/SearchResults';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
+import Pantry from './pages/Pantry';
+import RecipeSuggestions from './pages/RecipeSuggestions';
+import { ThemeProvider } from './context/ThemeContext';
+import Favorites from './pages/Favorites';
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipes" element={<RecipeList />} />        {/* All recipes */}
-        <Route path="/recipe/new" element={<RecipeForm />} />     {/* Create new recipe */}
-        <Route path="/recipe/:id" element={<RecipeDetail />} />   {/* Recipe detail / remix */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/search" element={<SearchResults />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/recipes" element={<RecipeList />} />
+            <Route path="/recipe/:id" element={<RecipeDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/search" element={<SearchResults />} />
+            
+            {/* Protected Routes - Require Login */}
+            <Route 
+              path="/recipe/new" 
+              element={
+                <ProtectedRoute>
+                  <RecipeForm />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/pantry" 
+              element={
+                <ProtectedRoute>
+                  <Pantry />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/recipes/suggestions" 
+              element={
+                <ProtectedRoute>
+                  <RecipeSuggestions />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin Only Route */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
+              <Route 
+                path="/favorites" 
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                } 
+              />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

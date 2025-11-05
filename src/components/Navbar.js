@@ -1,33 +1,190 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../firebase/config';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useTheme } from '../context/ThemeContext';
 
 function Navbar() {
-  const user = auth.currentUser;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isCurrentPath = (path) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setShowSearch(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <nav className="bg-white shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+          <Link to="/" className="text-2xl font-bold text-green-600">
+            Smart Pantry
+          </Link>
+        </div>
+      </nav>
+    );
+  }
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        <Link to="/" className="text-2xl font-bold text-green-600 hover:text-green-800">
-          Smart Pantry
-        </Link>
-        <div className="space-x-4 flex items-center">
-          <Link to="/" className="text-gray-700 hover:text-green-600">Home</Link>
-          <Link to="/recipes" className="text-gray-700 hover:text-green-600">All Recipes</Link>
-          {user && <Link to="/recipe/new" className="text-gray-700 hover:text-green-600">Create Recipe</Link>}
-          <Link to="/search" className="text-gray-700 hover:text-green-600">Search</Link>
-          {user ? (
-            <>
-              <Link to="/profile" className="text-gray-700 hover:text-green-600">Profile</Link>
-              <span className="text-gray-500 ml-2 text-sm">Hi, {user.email}</span>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="text-gray-700 hover:text-green-600">Login</Link>
-              <Link to="/register" className="text-gray-700 hover:text-green-600">Register</Link>
-            </>
-          )}
+    <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link to="/" className="text-2xl font-bold text-green-600 hover:text-green-800 transition">
+            🍳 Smart Pantry
+          </Link>
+          
+          <div className="hidden md:flex items-center space-x-6">
+            <Link 
+              to="/" 
+              className={`transition ${isCurrentPath('/') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/recipes" 
+              className={`transition ${isCurrentPath('/recipes') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+            >
+              Recipes
+            </Link>
+            {user && (
+              <>
+                <Link 
+                  to="/pantry" 
+                  className={`transition ${isCurrentPath('/pantry') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+                >
+                  My Pantry
+                </Link>
+                <Link 
+                  to="/recipe/new" 
+                  className={`transition ${isCurrentPath('/recipe/new') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+                >
+                  Create
+                </Link>
+                <Link 
+                  to="/profile" 
+                  className={`transition ${isCurrentPath('/profile') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+                >
+                  Profile
+                </Link>
+                <Link 
+                  to="/favorites" 
+                  className={`transition ${isCurrentPath('/favorites') ? 'text-white dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
+                >
+                  Favorites
+                </Link>
+              </>
+            )}
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="text-2xl hover:scale-110 transition"
+            >
+              {isDark ? '☀️' : '🌙'}
+            </button>
+            
+            <button
+              onClick={() => setShowSearch(!showSearch)}
+              className="text-gray-700 hover:text-green-600 transition"
+            >
+              🔍
+            </button>
+
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-600 text-sm">
+                  {user.displayName || user.email?.split('@')[0]}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link 
+                  to="/login" 
+                  className="text-gray-700 hover:text-green-600 transition px-4 py-2"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register" 
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setShowSearch(!showSearch)}
+              className="text-gray-700 hover:text-green-600"
+            >
+              🔍
+            </button>
+          </div>
         </div>
+
+        {/* Search Bar (appears when toggled) */}
+        {showSearch && (
+          <div className="pb-4">
+            <form onSubmit={handleSearch} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Search recipes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500"
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     </nav>
   );

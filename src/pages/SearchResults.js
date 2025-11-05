@@ -18,8 +18,11 @@ function SearchResults() {
       const snapshot = await getDocs(q);
       setRecipes(snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
+        .filter(r => {
+            const name = r.name || r.title || '';
+            return name.toLowerCase().includes(searchTerm.toLowerCase());
+            })
+        );
     };
     fetchRecipes();
   }, [searchTerm]);
