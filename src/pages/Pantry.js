@@ -19,6 +19,10 @@ function Pantry() {
   const [unit, setUnit] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [aiResponse, setAiResponse] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -98,6 +102,46 @@ function Pantry() {
     }
   };
 
+  const handleWhatCanICook = async () => {
+  if (pantryItems.length === 0) {
+    alert("Your pantry is empty!");
+    return;
+  }
+
+  setAiResponse("");
+  setAiLoading(true);
+
+  try {
+    const ingredientList = pantryItems.map(i => i.name).join(", ");
+    const response = await fetch("http://localhost:11434/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "mistral:7b-instruct",
+        prompt: `I have the following ingredients: ${ingredientList}. Suggest 3 recipes I can cook right now. Include short names and brief descriptions.`,
+      }),
+    });
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      fullText += chunk;
+      setAiResponse(prev => prev + chunk);
+    }
+  } catch (err) {
+    console.error("Error calling Ollama:", err);
+    setAiResponse("⚠️ Could not connect to AI server. Make sure Ollama is running with mistral:7b-instruct.");
+  }
+
+  setAiLoading(false);
+};
+
+
   const filteredItems = pantryItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -140,13 +184,30 @@ function Pantry() {
         >
           {showAddForm ? 'Cancel' : '+ Add Ingredient'}
         </button>
-        <Link
-          to="/recipes/suggestions"
+        <button
+          onClick={handleWhatCanICook}
           className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
         >
-          🍳 What Can I Cook?
-        </Link>
+          {aiLoading ? "Thinking..." : "🍳 What Can I Cook?"}
+        </button>
       </div>
+      {aiResponse && (
+        <div className="bg-gray-900 text-white p-6 rounded-lg mb-8 shadow-md">
+          <h3 className="text-2xl font-semibold mb-3 text-green-400">
+            AI Recipe Suggestions
+          </h3>
+          {aiResponse
+            .split(/\n|\d\./) // split numbered recipes
+            .filter(line => line.trim())
+            .map((line, index) => (
+              <p key={index} className="mb-2 text-gray-200">
+                {line.trim()}
+              </p>
+            ))}
+        </div>
+      )}
+
+
 
       {/* Add Item Form */}
       {showAddForm && (
