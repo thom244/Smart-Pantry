@@ -126,13 +126,32 @@ function Pantry() {
     const decoder = new TextDecoder("utf-8");
     let fullText = "";
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value);
-      fullText += chunk;
-      setAiResponse(prev => prev + chunk);
+    let buffer = "";
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  buffer += decoder.decode(value, { stream: true });
+  const parts = buffer.split("\n");
+
+  // Keep the last incomplete part in the buffer
+  buffer = parts.pop();
+
+  for (const part of parts) {
+    if (!part.trim()) continue;
+    try {
+      const json = JSON.parse(part);
+      if (json.response) {
+        setAiResponse(prev => prev + json.response);
+      }
+    } catch {
+      // Ignore invalid JSON chunks until the rest arrives
     }
+  }
+}
+
+
   } catch (err) {
     console.error("Error calling Ollama:", err);
     setAiResponse("⚠️ Could not connect to AI server. Make sure Ollama is running with mistral:7b-instruct.");
