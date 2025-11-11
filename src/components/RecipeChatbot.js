@@ -107,12 +107,9 @@ const RecipeChatbot = () => {
               }
               
               if (data.done) {
-                setMessages(prev => [...prev, { 
-                  role: 'assistant', 
-                  content: accumulatedText 
-                }]);
                 setStreamingMessage('');
               }
+
               
               if (data.error) {
                 throw new Error(data.error);
