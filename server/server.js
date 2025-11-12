@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Ollama configuration
 const OLLAMA_API_URL = 'http://localhost:11434/api/generate';
-const MODEL = 'gemma2:2b'; // or whatever model you have installed
+const MODEL = 'gemma2'; // or whatever model you have installed
 
 // Test endpoint
 app.get('/api/test', (req, res) => {

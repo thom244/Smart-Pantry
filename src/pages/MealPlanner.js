@@ -51,6 +51,17 @@ function MealPlanner() {
     try {
       const mealPlanDoc = await getDoc(doc(db, 'users', userId, 'mealPlans', 'current'));
       if (mealPlanDoc.exists()) setMealPlan(mealPlanDoc.data().plan || {});
+      const ensureMealPlanStructure = (plan = {}) => {
+        const structured = { ...plan };
+        DAYS_OF_WEEK.forEach(day => {
+          if (!structured[day]) structured[day] = {};
+          MEAL_TYPES.forEach(meal => {
+            if (!structured[day][meal]) structured[day][meal] = [];
+          });
+        });
+        return structured;
+      };
+
       const recipesSnapshot = await getDocs(
         query(collection(db, 'recipes'), orderBy('createdAt', 'desc'), limit(200))
       );
@@ -115,19 +126,19 @@ function MealPlanner() {
       MEAL_TYPES.forEach(mealType => {
         const meals = mealPlan[day]?.[mealType] || [];
         meals.forEach(recipe => {
-          if (!recipe.ingredients) return;
+          if (!Array.isArray(recipe.ingredients)) return;
           recipe.ingredients.forEach(ing => {
+            if (!ing?.name) return;
             const name = ing.name.toLowerCase().trim();
             const unit = ing.unit || '';
-            const qty = ing.quantity || 0;
+            const qty = parseFloat(ing.quantity) || 0;
 
             if (!ingredientsMap[name]) {
               ingredientsMap[name] = { name: ing.name, quantity: qty, unit };
             } else {
-              // Aggregate quantity (convert units if needed)
               const existing = ingredientsMap[name];
               let addedQty = qty;
-              if (unit !== existing.unit && unit && existing.unit) {
+              if (unit && existing.unit && unit !== existing.unit) {
                 addedQty = convertUnit(qty, unit, existing.unit);
               }
               existing.quantity += addedQty;
@@ -139,6 +150,7 @@ function MealPlanner() {
 
     setShoppingList(Object.values(ingredientsMap));
   };
+
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>Please login to use Meal Planner</div>;
@@ -159,18 +171,55 @@ function MealPlanner() {
           {MEAL_TYPES.map(mealType => (
             <tr key={mealType}>
               <td className="border p-2 font-semibold">{mealType}</td>
-              {DAYS_OF_WEEK.map(day => (
-                <td key={day} className="border p-2">
-                  {mealPlan[day]?.[mealType]?.map(recipe => (
-                    <div key={recipe.id} className="bg-gray-100 p-1 rounded mb-1">
-                      {recipe.name}
+              {DAYS_OF_WEEK.map(day => {
+                // Filter recipes that match this meal type (case-insensitive)
+                const recipesForMealType = recipes.filter(
+                  r => r.category?.toLowerCase() === mealType.toLowerCase()
+                );
+                const selectedRecipes = mealPlan[day]?.[mealType] || [];
+
+                return (
+                  <td key={day} className="border p-2">
+                    {/* Dropdown to choose recipe */}
+                    <select
+                      className="w-full border border-gray-300 rounded p-1 dark:bg-gray-900 dark:text-white"
+                      value=""
+                      onChange={(e) => {
+                        const selectedId = e.target.value;
+                        if (!selectedId) return;
+                        const recipe = recipes.find(r => r.id === selectedId);
+                        if (recipe) addRecipeToSlot(day, mealType, recipe);
+                      }}
+                    >
+                      <option value="">➕ Add Recipe</option>
+                      {recipesForMealType.map(recipe => (
+                        <option key={recipe.id} value={recipe.id}>
+                          {recipe.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Display selected recipes */}
+                    <div className="mt-2 space-y-1">
+                      {selectedRecipes.map(recipe => (
+                        <div
+                          key={recipe.id}
+                          className="bg-gray-800 text-white p-1 rounded text-sm cursor-pointer hover:bg-red-500 transition"
+                          onClick={() => removeRecipeFromSlot(day, mealType, recipe.id)}
+                          title="Click to remove this recipe"
+                        >
+                          {recipe.name}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </td>
-              ))}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
+
+
       </table>
 
       <button
