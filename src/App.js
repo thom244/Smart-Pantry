@@ -15,18 +15,16 @@ import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import Pantry from './pages/Pantry';
 import RecipeSuggestions from './pages/RecipeSuggestions';
-import { ThemeProvider } from './context/ThemeContext';
-import Favorites from './pages/Favorites';
+import MealPlanner from './pages/MealPlanner';
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              {/* Public Routes */}
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<RecipeList />} />
             <Route path="/recipe/:id" element={<RecipeDetail />} />
@@ -77,20 +75,11 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-              <Route 
-                path="/favorites" 
-                element={
-                  <ProtectedRoute>
-                    <Favorites />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

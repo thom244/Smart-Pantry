@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useTheme } from '../context/ThemeContext';
 
 function Navbar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const isCurrentPath = (path) => {
-    if (path === '/') {
-      return location.pathname === '/';
-    }
-    return location.pathname.startsWith(path);
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -59,7 +49,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors">
+    <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="text-2xl font-bold text-green-600 hover:text-green-800 transition">
@@ -67,55 +57,30 @@ function Navbar() {
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">
-            <Link 
-              to="/" 
-              className={`transition ${isCurrentPath('/') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-            >
+            <Link to="/" className="text-gray-700 hover:text-green-600 transition">
               Home
             </Link>
-            <Link 
-              to="/recipes" 
-              className={`transition ${isCurrentPath('/recipes') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-            >
+            <Link to="/recipes" className="text-gray-700 hover:text-green-600 transition">
               Recipes
             </Link>
             {user && (
               <>
-                <Link 
-                  to="/pantry" 
-                  className={`transition ${isCurrentPath('/pantry') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-                >
+                <Link to="/pantry" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
                   My Pantry
                 </Link>
-                <Link 
-                  to="/recipe/new" 
-                  className={`transition ${isCurrentPath('/recipe/new') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-                >
+                <Link to="/meal-planner" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
+                  Meal Planner
+                </Link>
+                <Link to="/recipe/new" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
                   Create
                 </Link>
-                <Link 
-                  to="/profile" 
-                  className={`transition ${isCurrentPath('/profile') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-                >
+                <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
                   Profile
-                </Link>
-                <Link 
-                  to="/favorites" 
-                  className={`transition ${isCurrentPath('/favorites') ? 'text-blue dark:text-white' : 'text-gray-700 dark:text-gray-400'} hover:text-green-600 dark:hover:text-green-500`}
-                >
-                  Favorites
                 </Link>
               </>
             )}
             
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="text-2xl hover:scale-110 transition"
-            >
-              {isDark ? '☀️' : '🌙'}
-            </button>
-            
+            {/* Search Button */}
             <button
               onClick={() => setShowSearch(!showSearch)}
               className="text-gray-700 hover:text-green-600 transition"
@@ -173,7 +138,7 @@ function Navbar() {
                 placeholder="Search recipes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 autoFocus
               />
               <button
