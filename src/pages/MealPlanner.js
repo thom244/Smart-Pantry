@@ -169,7 +169,7 @@ function MealPlanner() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Weekly Meal Planner</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-white">Weekly Meal Planner</h1>
 
       {/* Meal plan grid (non-modifiable) */}
       <table className="w-full border border-gray-700 rounded-lg text-sm shadow-lg">
@@ -257,15 +257,18 @@ function MealPlanner() {
       </table>
 
 
-      <button
-        onClick={generateShoppingList}
-        className="bg-green-500 text-white rounded p-2 mb-4"
-      >
-        Generate Ingredients List
-      </button>
+      <div className="mt-6">
+  <button
+    onClick={generateShoppingList}
+    className="bg-green-500 hover:bg-green-600 text-white rounded p-2 shadow-md transition"
+  >
+    Generate Ingredients List
+  </button>
+</div>
+
 
       {shoppingList.length > 0 && (
-        <div className="mb-4">
+        <div className="mt-6 mb-4">
           <div className="bg-gray-900 border border-gray-700 rounded-lg shadow-lg p-4 max-w-md">
             <h2 className="text-xl font-bold mb-3 text-green-400">🧺 Ingredients Needed</h2>
             <ul className="divide-y divide-gray-700">
