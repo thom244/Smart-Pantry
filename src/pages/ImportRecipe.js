@@ -220,7 +220,7 @@ export default function ImportRecipe() {
       
       setStep(3);
       setTimeout(() => {
-        navigate(/recipe/${docRef.id});
+        navigate(`/recipe/${docRef.id}`);
       }, 2000);
 
     } catch (err) {
@@ -437,7 +437,7 @@ export default function ImportRecipe() {
                     <input
                       className="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       type="url"
-                      placeholder={Image ${index + 1} URL}
+                      placeholder={`Image ${index + 1} URL`}
                       value={image}
                       onChange={(e) => handleImageChange(index, e.target.value)}
                     />
