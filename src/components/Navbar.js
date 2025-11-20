@@ -30,7 +30,7 @@ function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(/search?q=${encodeURIComponent(searchQuery.trim())});
       setSearchQuery('');
       setShowSearch(false);
     }
@@ -73,6 +73,9 @@ function Navbar() {
                 </Link>
                 <Link to="/recipe/new" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
                   Create
+                </Link>
+                <Link to="/import-recipe" className="text-gray-700 dark:text-gray-200 hover:text-green-600 transition">
+                  Import Recipe
                 </Link>
                 <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition">
                   Profile

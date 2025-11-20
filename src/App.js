@@ -16,6 +16,7 @@ import RecipeForm from './components/RecipeForm';
 import Pantry from './pages/Pantry';
 import RecipeSuggestions from './pages/RecipeSuggestions';
 import MealPlanner from './pages/MealPlanner';
+import ImportRecipe from "./pages/ImportRecipe";
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <RecipeSuggestions />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/import-recipe" 
+              element={
+                <ProtectedRoute>
+                  <ImportRecipe />
                 </ProtectedRoute>
               } 
             />
