@@ -61,6 +61,7 @@ function MealPlanner() {
   const [shoppingList, setShoppingList] = useState([]);
   const [showShoppingList, setShowShoppingList] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -271,7 +272,23 @@ function MealPlanner() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
+              <button
+                onClick={() => setEditMode(!editMode)}
+                className={`${
+                  editMode 
+                    ? 'bg-blue-600 hover:bg-blue-700' 
+                    : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                } ${
+                  editMode 
+                    ? 'text-white' 
+                    : 'text-gray-700 dark:text-gray-200'
+                } px-6 py-3 rounded-lg shadow-lg transition font-semibold flex items-center gap-2`}
+              >
+                <span className="text-xl">{editMode ? '✓' : '✏️'}</span>
+                <span>{editMode ? 'Done' : 'Edit'}</span>
+              </button>
+
               <button
                 onClick={generateShoppingList}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg transition font-semibold flex items-center gap-2 transform hover:scale-105"
@@ -293,12 +310,12 @@ function MealPlanner() {
         {/* Meal Plan Grid - Desktop View */}
         <div className="hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full table-fixed">
               <thead className="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-700 dark:to-green-800">
                 <tr>
-                  <th className="p-4 text-left text-white font-bold w-32">Meal Type</th>
+                  <th className="p-4 text-left text-white font-bold w-40 border-r border-green-500">Meal Type</th>
                   {DAYS_OF_WEEK.map(day => (
-                    <th key={day} className="p-4 text-center text-white font-bold min-w-[200px]">
+                    <th key={day} className="p-4 text-center text-white font-bold border-r border-green-500 last:border-r-0">
                       {day}
                     </th>
                   ))}
@@ -310,7 +327,7 @@ function MealPlanner() {
                     key={mealType}
                     className="border-t border-gray-200 dark:border-gray-700"
                   >
-                    <td className="p-4 bg-gray-50 dark:bg-gray-900">
+                    <td className="p-4 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
                       <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${MEAL_COLORS[mealType]} text-white px-4 py-2 rounded-lg font-semibold shadow-md`}>
                         <span className="text-xl">{MEAL_EMOJIS[mealType]}</span>
                         <span>{mealType}</span>
@@ -319,7 +336,7 @@ function MealPlanner() {
                     {DAYS_OF_WEEK.map(day => {
                       const selectedRecipes = mealPlan[day]?.[mealType] || [];
                       return (
-                        <td key={day} className="p-4 align-top bg-white dark:bg-gray-800">
+                        <td key={day} className="p-4 align-top bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 last:border-r-0">
                           <div className="space-y-3">
                             {/* Selected Recipes */}
                             {selectedRecipes.map(recipe => (
@@ -363,27 +380,38 @@ function MealPlanner() {
                                     </div>
                                   </div>
                                 </Link>
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    removeRecipeFromSlot(day, mealType, recipe.id);
-                                  }}
-                                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm transition shadow-lg font-bold"
-                                  title="Remove recipe"
-                                >
-                                  ✕
-                                </button>
+                                {editMode && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      removeRecipeFromSlot(day, mealType, recipe.id);
+                                    }}
+                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm transition shadow-lg font-bold"
+                                    title="Remove recipe"
+                                  >
+                                    ✕
+                                  </button>
+                                )}
                               </div>
                             ))}
 
-                            {/* Add Recipe Button */}
-                            <button
-                              onClick={() => openRecipeSelector(day, mealType)}
-                              className="w-full bg-white dark:bg-gray-700 hover:bg-green-50 dark:hover:bg-green-900/30 border-2 border-dashed border-green-300 dark:border-green-700 hover:border-green-500 dark:hover:border-green-500 text-green-600 dark:text-green-500 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
-                            >
-                              <span className="text-lg">+</span>
-                              <span>Add Recipe</span>
-                            </button>
+                            {/* Add Recipe Button - Only show in edit mode */}
+                            {editMode && (
+                              <button
+                                onClick={() => openRecipeSelector(day, mealType)}
+                                className="w-full bg-white dark:bg-gray-700 hover:bg-green-50 dark:hover:bg-green-900/30 border-2 border-dashed border-green-300 dark:border-green-700 hover:border-green-500 dark:hover:border-green-500 text-green-600 dark:text-green-500 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                              >
+                                <span className="text-lg">+</span>
+                                <span>Add Recipe</span>
+                              </button>
+                            )}
+
+                            {/* Empty state when no recipes and not in edit mode */}
+                            {!editMode && selectedRecipes.length === 0 && (
+                              <div className="text-center py-6 text-gray-400 dark:text-gray-600 text-sm">
+                                No recipe planned
+                              </div>
+                            )}
                           </div>
                         </td>
                       );
@@ -436,20 +464,33 @@ function MealPlanner() {
                                 )}
                               </div>
                             </Link>
-                            <button
-                              onClick={() => removeRecipeFromSlot(day, mealType, recipe.id)}
-                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                            >
-                              ✕
-                            </button>
+                            {editMode && (
+                              <button
+                                onClick={() => removeRecipeFromSlot(day, mealType, recipe.id)}
+                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                              >
+                                ✕
+                              </button>
+                            )}
                           </div>
                         ))}
-                        <button
-                          onClick={() => openRecipeSelector(day, mealType)}
-                          className="w-full bg-green-50 dark:bg-green-900/30 border-2 border-dashed border-green-300 dark:border-green-700 text-green-600 dark:text-green-500 py-2 rounded-lg text-sm font-semibold"
-                        >
-                          + Add Recipe
-                        </button>
+                        
+                        {/* Add Recipe Button - Only show in edit mode */}
+                        {editMode && (
+                          <button
+                            onClick={() => openRecipeSelector(day, mealType)}
+                            className="w-full bg-green-50 dark:bg-green-900/30 border-2 border-dashed border-green-300 dark:border-green-700 text-green-600 dark:text-green-500 py-2 rounded-lg text-sm font-semibold"
+                          >
+                            + Add Recipe
+                          </button>
+                        )}
+
+                        {/* Empty state when no recipes and not in edit mode */}
+                        {!editMode && selectedRecipes.length === 0 && (
+                          <div className="text-center py-4 text-gray-400 dark:text-gray-600 text-sm">
+                            No recipe planned
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -537,18 +578,18 @@ function MealPlanner() {
         {showRecipeSelector && selectedSlot && (
           <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-start z-50 p-4 overflow-auto backdrop-blur-sm">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden mt-12">
-               <div className="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-700 dark:to-green-800 p-6">
-                 <h2 className="text-3xl font-bold text-white mb-2">
-                   Add Recipe
-                 </h2>
-                 <p className="text-green-100">
-                   <span className="font-semibold">{selectedSlot.day}</span> • <span className="font-semibold">{selectedSlot.mealType}</span>
-                 </p>
-               </div>
- 
-               <div className="p-6">
-                 {/* Search & Filter */}
-                 <div className="flex flex-col md:flex-row gap-3 mb-6">
+              <div className="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-700 dark:to-green-800 p-6">
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  Add Recipe
+                </h2>
+                <p className="text-green-100">
+                  <span className="font-semibold">{selectedSlot.day}</span> • <span className="font-semibold">{selectedSlot.mealType}</span>
+                </p>
+              </div>
+
+              <div className="p-6">
+                {/* Search & Filter */}
+                <div className="flex flex-col md:flex-row gap-3 mb-6">
                   <input
                     type="text"
                     placeholder="🔍 Search recipes..."
