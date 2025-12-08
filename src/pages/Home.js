@@ -557,18 +557,7 @@ function Home() {
                 Discover delicious recipes, track your ingredients, and never wonder "what's for dinner?" again.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link
-                  to="/register"
-                  className="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-lg"
-                >
-                  Get Started Free
-                </Link>
-                <Link
-                  to="/recipes"
-                  className="bg-white text-green-600 border-2 border-green-600 px-8 py-4 rounded-xl hover:bg-green-50 transition shadow-lg font-semibold text-lg"
-                >
-                  Explore Recipes
-                </Link>
+
                 <Link
                   to="/register"
                   className="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-lg"

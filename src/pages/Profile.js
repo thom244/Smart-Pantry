@@ -12,7 +12,8 @@ function Profile() {
   const [userRecipes, setUserRecipes] = useState([]);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('recipes'); // 'recipes' or 'favorites'
+  const [activeTab, setActiveTab] = useState('recipes');
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
   
   useEffect(() => {
     if (location.state && location.state.activeTab) {
@@ -36,7 +37,6 @@ function Profile() {
     try {
       setLoading(true);
       
-      // Fetch user's recipes
       const recipesQuery = query(
         collection(db, 'recipes'),
         where('authorId', '==', userId)
@@ -48,7 +48,6 @@ function Profile() {
       }));
       setUserRecipes(recipes);
 
-      // Fetch favorited recipes
       const allRecipesSnapshot = await getDocs(collection(db, 'recipes'));
       const favorites = allRecipesSnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
@@ -77,7 +76,6 @@ function Profile() {
     }
 
     try {
-      // Check if there are remixes of this recipe
       const remixesQuery = query(
         collection(db, 'recipes'),
         where('originalRecipeId', '==', recipeId)
@@ -86,10 +84,8 @@ function Profile() {
       const remixes = remixesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       if (remixes.length > 0) {
-        // There are remixes - promote the first one
         const firstRemix = remixes[0];
         
-        // Update remaining remixes to point to the first remix as the new original
         for (let i = 1; i < remixes.length; i++) {
           const remixRef = doc(db, 'recipes', remixes[i].id);
           await updateDoc(remixRef, {
@@ -97,7 +93,6 @@ function Profile() {
           });
         }
 
-        // Remove the isRemix flag from first remix (it's now the main recipe)
         const firstRemixRef = doc(db, 'recipes', firstRemix.id);
         await updateDoc(firstRemixRef, {
           isRemix: false,
@@ -107,15 +102,25 @@ function Profile() {
         alert(`Recipe deleted. "${firstRemix.name}" is now the main recipe with ${remixes.length - 1} remix(es).`);
       }
 
-      // Delete the original recipe
       await deleteDoc(doc(db, 'recipes', recipeId));
-      
-      // Refresh the recipes list
       fetchUserData(user.uid);
     } catch (error) {
       console.error('Error deleting recipe:', error);
       alert('Failed to delete recipe. Please try again.');
     }
+  };
+
+  const toggleDescription = (recipeId) => {
+    setExpandedDescriptions(prev => ({
+      ...prev,
+      [recipeId]: !prev[recipeId]
+    }));
+  };
+
+  const truncateText = (text, maxLength = 100) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
   };
 
   if (loading) {
@@ -207,25 +212,43 @@ function Profile() {
           {userRecipes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {userRecipes.map(recipe => (
-                <div key={recipe.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div key={recipe.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col h-[420px]">
                   <Link to={`/recipe/${recipe.id}`}>
-                    <RecipeImage recipe={recipe} className="w-full h-48" showBadge={true} />
+                    <RecipeImage recipe={recipe} className="w-full h-48 object-cover" showBadge={true} />
                   </Link>
-                  <div className="p-4">
+                  <div className="p-4 flex flex-col flex-1">
                     <Link to={`/recipe/${recipe.id}`}>
-                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-green-600 dark:hover:text-green-500">
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-green-600 dark:hover:text-green-500 line-clamp-2 min-h-[3.5rem]">
                         {recipe.name}
                       </h3>
                     </Link>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                      {recipe.description}
-                    </p>
-                    <div className="flex gap-2">
+                    <div className="flex-1 mb-3">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        {expandedDescriptions[recipe.id] 
+                          ? recipe.description 
+                          : truncateText(recipe.description, 100)}
+                      </p>
+                      {recipe.description && recipe.description.length > 100 && (
+                        <button
+                          onClick={() => toggleDescription(recipe.id)}
+                          className="text-green-600 dark:text-green-500 text-sm mt-1 hover:underline"
+                        >
+                          {expandedDescriptions[recipe.id] ? 'Read less' : 'Read more'}
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex gap-2 mt-auto">
                       <Link
                         to={`/recipe/${recipe.id}`}
                         className="flex-1 bg-green-600 text-white text-center px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm"
                       >
                         View
+                      </Link>
+                      <Link
+                        to={`/recipe/edit/${recipe.id}`}
+                        className="flex-1 bg-blue-500 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm"
+                      >
+                        Edit
                       </Link>
                       <button
                         onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
@@ -257,24 +280,36 @@ function Profile() {
           {favoriteRecipes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favoriteRecipes.map(recipe => (
-                <Link
-                  key={recipe.id}
-                  to={`/recipe/${recipe.id}`}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition"
-                >
-                  <RecipeImage recipe={recipe} className="w-full h-48" showBadge={true} />
-                  <div className="p-4">
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
-                      {recipe.description}
-                    </p>
+                <div key={recipe.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition flex flex-col h-[400px]">
+                  <Link to={`/recipe/${recipe.id}`}>
+                    <RecipeImage recipe={recipe} className="w-full h-48 object-cover" showBadge={true} />
+                  </Link>
+                  <div className="p-4 flex flex-col flex-1">
+                    <Link to={`/recipe/${recipe.id}`}>
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-green-600 dark:hover:text-green-500 line-clamp-2 min-h-[3.5rem]">
+                        {recipe.name}
+                      </h3>
+                    </Link>
+                    <div className="flex-1">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        {expandedDescriptions[recipe.id] 
+                          ? recipe.description 
+                          : truncateText(recipe.description, 100)}
+                      </p>
+                      {recipe.description && recipe.description.length > 100 && (
+                        <button
+                          onClick={() => toggleDescription(recipe.id)}
+                          className="text-green-600 dark:text-green-500 text-sm mt-1 hover:underline"
+                        >
+                          {expandedDescriptions[recipe.id] ? 'Read less' : 'Read more'}
+                        </button>
+                      )}
+                    </div>
                     <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
                       by {recipe.author?.split('@')[0]}
                     </p>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (

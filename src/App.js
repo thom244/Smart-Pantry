@@ -18,6 +18,7 @@ import Pantry from './pages/Pantry';
 import RecipeSuggestions from './pages/RecipeSuggestions';
 import MealPlanner from './pages/MealPlanner';
 import ImportRecipe from "./pages/ImportRecipe";
+import EditRecipe from './pages/EditRecipe';
 
 function App() {
   return (
@@ -50,6 +51,12 @@ function App() {
                 <ProtectedRoute>
                   <AddRecipe />
                 </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/recipe/edit/:id" 
+              element={
+                <EditRecipe />
               } 
             />
             <Route 
