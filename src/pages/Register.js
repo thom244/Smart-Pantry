@@ -16,7 +16,6 @@ function Register() {
 
   const getDefaultAvatar = (name) => {
     // Generate a colorful avatar URL based on name
-    const initial = name.charAt(0).toUpperCase();
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=200`;
   };
 
@@ -41,10 +40,10 @@ function Register() {
 
     try {
       setLoading(true);
-      
+
       // Create user account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+
       // Set display name and photo
       const avatarURL = photoURL || getDefaultAvatar(name);
       await updateProfile(userCredential.user, {
@@ -78,20 +77,20 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 dark:from-green-300 dark:to-green-100 p-4">
-      <div className="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900 p-4">
+      <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100 dark:border-gray-700">
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-green-700 dark:text-green-300">Create Account</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-coral-500 via-sunny-400 to-ocean-500 bg-clip-text text-transparent">Create Account</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Join Smart Pantry today!</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-300 border border-red-200 dark:border-red-400 text-red-700 dark:text-red-900 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-coral-50 dark:bg-coral-900/30 border border-coral-200 dark:border-coral-800 text-coral-700 dark:text-coral-400 px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
 
-  <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Name */}
           <div>
             <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
@@ -102,7 +101,7 @@ function Register() {
               placeholder="John Doe"
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
             />
           </div>
@@ -117,7 +116,7 @@ function Register() {
               placeholder="you@example.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
             />
           </div>
@@ -132,7 +131,7 @@ function Register() {
               placeholder="Min 6 characters"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
             />
           </div>
@@ -147,14 +146,14 @@ function Register() {
               placeholder="Re-enter password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
             />
           </div>
 
           {/* Profile Picture URL (Optional) */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
               Profile Picture URL (optional)
             </label>
             <input
@@ -162,17 +161,17 @@ function Register() {
               placeholder="https://example.com/photo.jpg"
               value={photoURL}
               onChange={e => setPhotoURL(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Leave empty for an automatic avatar based on your name
             </p>
             {(photoURL || name) && (
               <div className="mt-3 flex items-center gap-3">
-                <img 
-                  src={photoURL || getDefaultAvatar(name)} 
+                <img
+                  src={photoURL || getDefaultAvatar(name)}
                   alt="Preview"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-green-500"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-ocean-500"
                   onError={(e) => {
                     e.target.src = getDefaultAvatar(name || 'User');
                   }}
@@ -185,7 +184,7 @@ function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition font-semibold disabled:bg-gray-400 dark:disabled:bg-gray-700 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-coral-500 to-pink-500 text-white px-4 py-3 rounded-lg hover:from-coral-600 hover:to-pink-600 transition font-semibold disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed shadow-lg"
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
@@ -193,7 +192,7 @@ function Register() {
 
         <p className="text-gray-600 dark:text-gray-400 mt-6 text-center">
           Already have an account?{' '}
-          <Link to="/login" className="text-green-600 dark:text-green-300 hover:underline font-semibold">
+          <Link to="/login" className="text-ocean-500 dark:text-cyan-400 hover:text-ocean-600 dark:hover:text-cyan-300 font-semibold">
             Login
           </Link>
         </p>

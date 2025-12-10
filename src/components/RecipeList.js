@@ -59,24 +59,11 @@ const RecipeList = () => {
     return (sum / ratings.length).toFixed(1);
   };
 
-  const getImagePlaceholder = (category) => {
-    const emojis = {
-      breakfast: '🥞',
-      lunch: '🥗',
-      dinner: '🍽️',
-      dessert: '🍰',
-      snack: '🍿',
-      main: '🍲',
-      side: '🥘'
-    };
-    return emojis[category] || '🍳';
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 dark:border-green-500 mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-coral-500 dark:border-coral-400 mb-4"></div>
           <div className="text-xl text-gray-600 dark:text-gray-400 font-semibold">Loading recipes...</div>
         </div>
       </div>
@@ -84,11 +71,11 @@ const RecipeList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 pb-24 transition-colors">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-coral-500 via-sunny-400 to-ocean-500 bg-clip-text text-transparent mb-2">
             All Recipes
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
@@ -111,7 +98,7 @@ const RecipeList = () => {
                 placeholder="Search recipes by name or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500 focus:border-transparent transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 focus:border-transparent transition"
               />
             </div>
 
@@ -120,7 +107,7 @@ const RecipeList = () => {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full md:w-auto pl-4 pr-10 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500 focus:border-transparent appearance-none cursor-pointer transition min-w-[200px]"
+                className="w-full md:w-auto pl-4 pr-10 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:focus:ring-ocean-400 focus:border-transparent appearance-none cursor-pointer transition min-w-[200px]"
               >
                 <option value="all">All Categories</option>
                 <option value="breakfast">🥞 Breakfast</option>
@@ -150,7 +137,7 @@ const RecipeList = () => {
                   setSearchTerm("");
                   setCategoryFilter("all");
                 }}
-                className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium transition"
+                className="text-ocean-500 dark:text-cyan-400 hover:text-ocean-600 dark:hover:text-cyan-300 font-medium transition"
               >
                 Clear filters
               </button>
@@ -163,19 +150,19 @@ const RecipeList = () => {
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-6xl mb-4">🍳</div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {searchTerm || categoryFilter !== "all" 
-                ? "No recipes found" 
+              {searchTerm || categoryFilter !== "all"
+                ? "No recipes found"
                 : "No recipes yet"}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-              {searchTerm || categoryFilter !== "all" 
-                ? "Try adjusting your search criteria or explore other categories." 
+              {searchTerm || categoryFilter !== "all"
+                ? "Try adjusting your search criteria or explore other categories."
                 : "Be the first to share a delicious recipe with the community!"}
             </p>
             {!searchTerm && categoryFilter === "all" && (
-              <Link 
-                to="/add-recipe" 
-                className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              <Link
+                to="/add-recipe"
+                className="inline-block bg-gradient-to-r from-coral-500 to-pink-500 hover:from-coral-600 hover:to-pink-600 text-white px-8 py-3 rounded-lg font-semibold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Create First Recipe
               </Link>
@@ -191,19 +178,13 @@ const RecipeList = () => {
               >
                 {/* Recipe Image */}
                 <div className="h-48 relative overflow-hidden">
-                  {recipe.imageUrl ? (
-                    <img 
-                      src={recipe.imageUrl} 
-                      alt={recipe.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 dark:from-green-600 dark:to-green-800 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <span className="text-7xl">{getImagePlaceholder(recipe.category)}</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0"></div>
-                  
+                  <RecipeImage
+                    recipe={recipe}
+                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                    showBadge={true}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 pointer-events-none"></div>
+
                   {/* Badges */}
                   <div className="absolute top-2 right-2 flex gap-2">
                     {recipe.isRemix && (
@@ -213,10 +194,10 @@ const RecipeList = () => {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="p-5">
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-coral-500 dark:group-hover:text-coral-400 transition">
                     {recipe.name || recipe.title}
                   </h3>
 
@@ -227,7 +208,7 @@ const RecipeList = () => {
 
                   {/* Recipe Info Tags */}
                   <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                    <span className="capitalize bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full font-medium">
+                    <span className="capitalize bg-coral-100 dark:bg-coral-900/30 text-coral-600 dark:text-coral-400 px-3 py-1 rounded-full font-medium">
                       {recipe.category || 'Main'}
                     </span>
                     {recipe.prepTime && (

@@ -8,19 +8,18 @@ import RecipeForm from '../components/RecipeForm';
 function EditRecipe() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [loading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState(null);
-  const [user, setUser] = useState(null);
 
   // 1. Monitor Auth State
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         // Not logged in -> Redirect
         navigate('/login');
       } else {
-        setUser(currentUser);
         // Only fetch recipe once we know who the user is
         fetchRecipe(currentUser.uid);
       }
@@ -36,12 +35,12 @@ function EditRecipe() {
 
       if (docSnap.exists()) {
         const recipeData = { id: docSnap.id, ...docSnap.data() };
-        
+
         // SECURITY CHECK: Is this user the author?
         if (recipeData.authorId !== currentUserId) {
-            alert("You are not authorized to edit this recipe.");
-            navigate('/');
-            return;
+          alert("You are not authorized to edit this recipe.");
+          navigate('/');
+          return;
         }
 
         setRecipe(recipeData);
@@ -61,7 +60,7 @@ function EditRecipe() {
   const handleUpdate = async (formData) => {
     try {
       const docRef = doc(db, 'recipes', id);
-      
+
       // Update specific fields (add more if your form has more)
       await updateDoc(docRef, {
         name: formData.name,
@@ -71,7 +70,7 @@ function EditRecipe() {
         cookTime: formData.cookTime,
         difficulty: formData.difficulty,
         // Don't update authorId, createdAt, ratings, etc.
-        updatedAt: new Date() 
+        updatedAt: new Date()
       });
 
       alert('Recipe updated successfully!');
@@ -96,10 +95,10 @@ function EditRecipe() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 sm:mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
           Edit Recipe
         </h1>
-        
+
         {recipe && (
-          <RecipeForm 
-            defaultRecipe={recipe} 
+          <RecipeForm
+            defaultRecipe={recipe}
             isEditMode={true}
             onSubmit={handleUpdate}
           />

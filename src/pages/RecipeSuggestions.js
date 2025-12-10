@@ -13,6 +13,7 @@ function RecipeSuggestions() {
   const [loading, setLoading] = useState(true);
   const [minMatchPercentage, setMinMatchPercentage] = useState(50);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -28,7 +29,7 @@ function RecipeSuggestions() {
   const fetchData = async (userId) => {
     try {
       setLoading(true);
-      
+
       const pantryRef = collection(db, 'users', userId, 'pantry');
       const pantrySnapshot = await getDocs(pantryRef);
       const items = pantrySnapshot.docs.map(doc => ({
@@ -63,7 +64,7 @@ function RecipeSuggestions() {
     'powdered sugar': 120,
     'icing sugar': 120,
     'confectioners sugar': 120,
-    
+
     // Flours
     'flour': 120,
     'all purpose flour': 120,
@@ -71,14 +72,14 @@ function RecipeSuggestions() {
     'bread flour': 127,
     'cake flour': 114,
     'whole wheat flour': 120,
-    
+
     // Dairy
     'butter': 227,
     'milk': 245,
     'cream': 240,
     'yogurt': 245,
     'sour cream': 230,
-    
+
     // Oils & Liquids
     'oil': 220,
     'olive oil': 216,
@@ -87,17 +88,17 @@ function RecipeSuggestions() {
     'honey': 340,
     'syrup': 340,
     'maple syrup': 320,
-    
+
     // Grains & Pasta
     'rice': 185,
     'pasta': 100,
     'oats': 80,
-    
+
     // Nuts & Seeds
     'almonds': 140,
     'walnuts': 100,
     'peanuts': 145,
-    
+
     // Other Common Ingredients
     'cocoa powder': 85,
     'baking powder': 220,
@@ -109,21 +110,21 @@ function RecipeSuggestions() {
   // Find density for an ingredient
   const findIngredientDensity = (ingredientName) => {
     if (!ingredientName) return null;
-    
+
     const normalized = ingredientName.toLowerCase().trim();
-    
+
     // Direct match
     if (ingredientDensities[normalized]) {
       return ingredientDensities[normalized];
     }
-    
+
     // Partial match - check if any key is contained in the ingredient name
     for (const [key, density] of Object.entries(ingredientDensities)) {
       if (normalized.includes(key) || key.includes(normalized)) {
         return density;
       }
     }
-    
+
     return null; // No density found
   };
 
@@ -133,7 +134,7 @@ function RecipeSuggestions() {
     if (qty === 0) return { value: 0, type: 'unknown', originalValue: qty, originalUnit: unit };
 
     const unitLower = (unit || '').toLowerCase().trim();
-    
+
     // Volume conversions (to ml)
     const volumeConversions = {
       'ml': 1,
@@ -173,8 +174,8 @@ function RecipeSuggestions() {
 
     // Check volume first
     if (volumeConversions[unitLower] !== undefined) {
-      return { 
-        value: qty * volumeConversions[unitLower], 
+      return {
+        value: qty * volumeConversions[unitLower],
         type: 'volume',
         originalValue: qty,
         originalUnit: unit
@@ -183,8 +184,8 @@ function RecipeSuggestions() {
 
     // Check weight
     if (weightConversions[unitLower] !== undefined) {
-      return { 
-        value: qty * weightConversions[unitLower], 
+      return {
+        value: qty * weightConversions[unitLower],
         type: 'weight',
         originalValue: qty,
         originalUnit: unit
@@ -192,8 +193,8 @@ function RecipeSuggestions() {
     }
 
     // For pieces, pinches, or unknown units
-    return { 
-      value: qty, 
+    return {
+      value: qty,
       type: 'count',
       originalValue: qty,
       originalUnit: unit
@@ -204,23 +205,23 @@ function RecipeSuggestions() {
   const convertCrossType = (fromValue, fromType, toType, ingredientName) => {
     if (fromType === toType) return fromValue;
     if (fromType === 'count' || toType === 'count') return null;
-    
+
     const density = findIngredientDensity(ingredientName);
     if (!density) return null; // Can't convert without density
-    
+
     if (fromType === 'volume' && toType === 'weight') {
       // ml to grams: (ml / 240) * density
       // 240ml = 1 cup
       const cups = fromValue / 240;
       return cups * density;
     }
-    
+
     if (fromType === 'weight' && toType === 'volume') {
       // grams to ml: (grams / density) * 240
       const cups = fromValue / density;
       return cups * 240;
     }
-    
+
     return null;
   };
 
@@ -241,7 +242,7 @@ function RecipeSuggestions() {
     // If same type, direct comparison
     if (pantryConverted.type === recipeConverted.type) {
       const hasEnough = pantryConverted.value >= recipeConverted.value;
-      const percentage = recipeConverted.value > 0 
+      const percentage = recipeConverted.value > 0
         ? (pantryConverted.value / recipeConverted.value * 100).toFixed(0)
         : 100;
 
@@ -257,8 +258,8 @@ function RecipeSuggestions() {
 
     // Try cross-type conversion (weight ↔ volume)
     if ((pantryConverted.type === 'volume' && recipeConverted.type === 'weight') ||
-        (pantryConverted.type === 'weight' && recipeConverted.type === 'volume')) {
-      
+      (pantryConverted.type === 'weight' && recipeConverted.type === 'volume')) {
+
       // Convert pantry to recipe's type
       const convertedPantryValue = convertCrossType(
         pantryConverted.value,
@@ -295,9 +296,9 @@ function RecipeSuggestions() {
     }
 
     // Can't convert - assume sufficient if ingredient exists
-    return { 
-      enough: true, 
-      status: 'incomparable', 
+    return {
+      enough: true,
+      status: 'incomparable',
       message: 'Different unit types (conversion not available)',
       pantryAmount: `${pantryItem.quantity} ${pantryItem.unit}`,
       neededAmount: `${recipeQuantity} ${recipeUnit}`
@@ -394,7 +395,7 @@ function RecipeSuggestions() {
       const fullyAvailable = matchingIngredients.length;
       const matchPercentage = total > 0 ? Math.round((fullyAvailable / total) * 100) : 0;
 
-      const cookabilityPercentage = total > 0 
+      const cookabilityPercentage = total > 0
         ? Math.round(((fullyAvailable + (insufficientIngredients.length * 0.5)) / total) * 100)
         : 0;
 
@@ -421,6 +422,7 @@ function RecipeSuggestions() {
     setMatchedRecipes(filtered);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (recipes.length > 0 && pantryItems.length > 0) {
       matchRecipesWithPantry(recipes, pantryItems);
@@ -451,7 +453,7 @@ function RecipeSuggestions() {
   if (pantryItems.length === 0) {
     return (
       <div className="max-w-4xl mx-auto p-6 min-h-screen bg-white dark:bg-gray-900">
-        <h1 className="text-4xl font-bold text-green-700 dark:text-green-500 mb-4">Recipe Suggestions</h1>
+        <h1 className="text-4xl font-bold text-green-700 dark:text-emerald-400 mb-4">Recipe Suggestions</h1>
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 dark:border-yellow-600 p-6 rounded-lg">
           <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
             Your pantry is empty! Add ingredients to get personalized recipe suggestions.
@@ -470,13 +472,13 @@ function RecipeSuggestions() {
   return (
     <div className="max-w-7xl mx-auto p-6 min-h-screen bg-white dark:bg-gray-900">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-green-700 dark:text-green-500 mb-2">
+        <h1 className="text-4xl font-bold text-green-700 dark:text-emerald-400 mb-2">
           🍳 What Can I Cook?
         </h1>
         <p className="text-gray-600 dark:text-gray-300">
           Based on the {pantryItems.length} ingredient{pantryItems.length !== 1 ? 's' : ''} in your pantry
         </p>
-        <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+        <p className="text-sm text-blue-600 dark:text-cyan-400 mt-1">
           ✨ Smart unit conversion enabled (weight ↔ volume)
         </p>
       </div>
@@ -526,19 +528,18 @@ function RecipeSuggestions() {
                       <div className="flex-1">
                         <Link
                           to={`/recipe/${recipe.id}`}
-                          className="text-2xl font-bold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
+                          className="text-2xl font-bold text-green-700 dark:text-emerald-400 hover:text-green-800 dark:hover:text-emerald-300"
                         >
                           {recipe.name}
                         </Link>
                         <p className="text-gray-600 dark:text-gray-300 mt-1">{recipe.description}</p>
                       </div>
-                      
+
                       <div className="ml-4 text-center">
-                        <div className={`text-4xl font-bold ${
-                          recipe.matchPercentage === 100 ? 'text-green-600 dark:text-green-400' :
+                        <div className={`text-4xl font-bold ${recipe.matchPercentage === 100 ? 'text-green-600 dark:text-green-400' :
                           recipe.matchPercentage >= 75 ? 'text-blue-600 dark:text-blue-400' :
-                          'text-orange-600 dark:text-orange-400'
-                        }`}>
+                            'text-orange-600 dark:text-orange-400'
+                          }`}>
                           {recipe.matchPercentage}%
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">Available</div>
@@ -548,7 +549,7 @@ function RecipeSuggestions() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                       {/* Fully Available */}
                       <div>
-                        <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">
+                        <h4 className="font-semibold text-green-700 dark:text-emerald-400 mb-2">
                           ✅ Have Enough ({recipe.matchingIngredients.length})
                         </h4>
                         <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
@@ -556,7 +557,7 @@ function RecipeSuggestions() {
                             <li key={i} className="truncate" title={ing.details.conversionNote || ''}>
                               • {ing.display}
                               {ing.details.conversionUsed && (
-                                <span className="text-xs text-blue-600 dark:text-blue-400 ml-1" title={ing.details.conversionNote}>
+                                <span className="text-xs text-blue-600 dark:text-cyan-400 ml-1" title={ing.details.conversionNote}>
                                   🔄
                                 </span>
                               )}
@@ -578,13 +579,13 @@ function RecipeSuggestions() {
                           </h4>
                           <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
                             {recipe.insufficientIngredients.slice(0, 3).map((ing, i) => (
-                              <li 
-                                key={i} 
-                                className="truncate" 
+                              <li
+                                key={i}
+                                className="truncate"
                                 title={`Have: ${ing.details.pantryAmount}${ing.details.conversionNote ? ' ' + ing.details.conversionNote : ''}, Need: ${ing.details.neededAmount}`}
                               >
                                 • {ing.display}
-                                <span className="text-xs text-yellow-600 dark:text-yellow-400 ml-1">
+                                <span className="text-xs text-yellow-600 dark:text-amber-400 ml-1">
                                   ({ing.details.percentage}%)
                                   {ing.details.conversionUsed && ' 🔄'}
                                 </span>
@@ -627,7 +628,7 @@ function RecipeSuggestions() {
                         View Recipe
                       </Link>
                       {recipe.matchPercentage === 100 && recipe.insufficientIngredients.length === 0 && (
-                        <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-4 py-2 rounded-lg font-semibold">
+                        <span className="bg-green-100 dark:bg-emerald-900/30 text-green-700 dark:text-emerald-400 px-4 py-2 rounded-lg font-semibold">
                           🎉 Perfect Match!
                         </span>
                       )}

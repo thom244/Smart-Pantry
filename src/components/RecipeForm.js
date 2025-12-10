@@ -191,14 +191,14 @@ const RecipeForm = ({ defaultRecipe = null, isRemix = false, originalRecipeId = 
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 shadow-lg rounded-2xl">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-green-700 dark:text-green-500">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-green-700 dark:text-emerald-400">
         {isRemix ? "🎨 Remix Recipe" : defaultRecipe && !isRemix ? "Edit Recipe" : "Create New Recipe"}
       </h2>
 
       {isRemix && (
         <div className="bg-blue-50 dark:bg-blue-800/30 border-l-4 border-blue-500 dark:border-blue-600 p-3 sm:p-4 mb-4 sm:mb-6">
           <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
-            You're creating a remix of "<strong className="dark:text-blue-300">{defaultRecipe?.name}</strong>". 
+            You're creating a remix of "<strong className="dark:text-blue-300">{defaultRecipe?.name}</strong>".
             Modify the recipe below and save it to your collection!
           </p>
         </div>
@@ -310,7 +310,7 @@ const RecipeForm = ({ defaultRecipe = null, isRemix = false, originalRecipeId = 
           <button
             type="button"
             onClick={addImageField}
-            className="mt-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-semibold text-sm sm:text-base"
+            className="mt-2 text-green-600 dark:text-emerald-400 hover:text-green-700 dark:hover:text-emerald-300 font-semibold text-sm sm:text-base"
           >
             + Add Another Image
           </button>
@@ -331,11 +331,10 @@ const RecipeForm = ({ defaultRecipe = null, isRemix = false, originalRecipeId = 
                 onDragStart={() => handleDragStart(index)}
                 onDragOver={(e) => handleDragOver(e, index)}
                 onDragEnd={handleDragEnd}
-                className={`flex flex-col sm:flex-row gap-2 p-2 rounded-lg ${
-                  draggedIndex === index
+                className={`flex flex-col sm:flex-row gap-2 p-2 rounded-lg ${draggedIndex === index
                     ? "bg-green-50 dark:bg-green-900/30 border-2 border-green-400 dark:border-green-600"
                     : "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600"
-                } cursor-move`}
+                  } cursor-move`}
               >
                 <div className="hidden sm:flex items-center justify-center text-gray-400 dark:text-gray-500 px-2">
                   ☰
@@ -391,7 +390,7 @@ const RecipeForm = ({ defaultRecipe = null, isRemix = false, originalRecipeId = 
           <button
             type="button"
             onClick={addIngredientField}
-            className="mt-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-semibold text-sm sm:text-base"
+            className="mt-2 text-green-600 dark:text-emerald-400 hover:text-green-700 dark:hover:text-emerald-300 font-semibold text-sm sm:text-base"
           >
             + Add Ingredient
           </button>
@@ -422,11 +421,10 @@ const RecipeForm = ({ defaultRecipe = null, isRemix = false, originalRecipeId = 
 
       {message && (
         <div
-          className={`mt-4 p-3 sm:p-4 rounded-lg text-center font-semibold text-sm sm:text-base ${
-            message.includes("✅")
+          className={`mt-4 p-3 sm:p-4 rounded-lg text-center font-semibold text-sm sm:text-base ${message.includes("✅")
               ? "bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300"
               : "bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300"
-          }`}
+            }`}
         >
           {message}
         </div>

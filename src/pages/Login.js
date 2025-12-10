@@ -35,10 +35,10 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-blue-50 dark:bg-gray-900 p-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl w-full shadow-2xl rounded-3xl overflow-hidden bg-white">
-        {/* Left Side - Decorative */}
-        <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-green-500 to-green-700 p-12 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900 p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl w-full shadow-2xl rounded-3xl overflow-hidden bg-white dark:bg-gray-800">
+        {/* Left Side - Decorative Rainbow Gradient */}
+        <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-coral-500 via-sunny-400 to-ocean-500 p-12 text-white">
           <div className="space-y-8 text-center">
             <div className="text-8xl animate-bounce">🍳</div>
             <h2 className="text-4xl font-bold">Welcome Back!</h2>
@@ -47,8 +47,8 @@ function Login() {
             </p>
             <div className="flex gap-4 justify-center text-6xl">
               <span className="animate-pulse">🥗</span>
-              <span className="animate-pulse" style={{animationDelay: '0.2s'}}>🍕</span>
-              <span className="animate-pulse" style={{animationDelay: '0.4s'}}>🍰</span>
+              <span className="animate-pulse" style={{ animationDelay: '0.2s' }}>🍕</span>
+              <span className="animate-pulse" style={{ animationDelay: '0.4s' }}>🍰</span>
             </div>
           </div>
         </div>
@@ -56,19 +56,19 @@ function Login() {
         {/* Right Side - Form */}
         <div className="p-8 md:p-12 flex flex-col justify-center">
           <div className="mb-8">
-            <h2 className="text-4xl font-bold text-gray-800 mb-2">Login</h2>
-            <p className="text-gray-600">Sign in to access your recipes</p>
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">Login</h2>
+            <p className="text-gray-600 dark:text-gray-400">Sign in to access your recipes</p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-coral-50 dark:bg-coral-900/30 border-l-4 border-coral-500 text-coral-700 dark:text-coral-400 px-4 py-3 rounded-lg mb-6">
               {error}
             </div>
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
                 Email Address
               </label>
               <input
@@ -76,13 +76,13 @@ function Login() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:border-green-600 transition"
+                className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:border-ocean-500 dark:focus:border-ocean-400 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
                 Password
               </label>
               <input
@@ -90,7 +90,7 @@ function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:border-green-600 transition"
+                className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:border-ocean-500 dark:focus:border-ocean-400 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 required
               />
             </div>
@@ -98,16 +98,16 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 rounded-xl hover:from-green-700 hover:to-green-800 transition font-semibold text-lg shadow-lg disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-coral-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:from-coral-600 hover:to-pink-600 transition font-semibold text-lg shadow-lg disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
-              <Link to="/register" className="text-green-600 hover:text-green-700 font-semibold">
+              <Link to="/register" className="text-ocean-500 hover:text-ocean-600 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold">
                 Create one now
               </Link>
             </p>
@@ -115,11 +115,11 @@ function Login() {
 
           {/* Quick Links */}
           <div className="mt-6 flex justify-center gap-4 text-sm">
-            <Link to="/" className="text-gray-500 hover:text-green-600 transition">
+            <Link to="/" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-red-400 transition">
               Back to Home
             </Link>
-            <span className="text-gray-300">•</span>
-            <Link to="/recipes" className="text-gray-500 hover:text-green-600 transition">
+            <span className="text-gray-300 dark:text-gray-600">•</span>
+            <Link to="/recipes" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-red-400 transition">
               Browse Recipes
             </Link>
           </div>

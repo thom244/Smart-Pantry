@@ -84,15 +84,17 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
       const decoder = new TextDecoder();
       let accumulatedText = '';
 
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) {
           // Stream finished - add final message
           if (accumulatedText) {
-            setMessages(prev => [...prev, { 
-              role: 'assistant', 
-              content: accumulatedText 
+            // eslint-disable-next-line no-loop-func
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: accumulatedText
             }]);
           }
           setStreamingMessage('');
@@ -103,30 +105,30 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split('\n');
 
-        for (const line of lines) {
+        // eslint-disable-next-line no-loop-func
+        lines.forEach(line => {
           if (line.startsWith('data: ')) {
             try {
               const data = JSON.parse(line.slice(6));
-              
+
               if (data.text) {
                 accumulatedText += data.text;
                 setStreamingMessage(accumulatedText);
               }
-              
+
               if (data.done) {
                 setStreamingMessage('');
               }
 
-              
+
               if (data.error) {
                 throw new Error(data.error);
               }
             } catch (parseError) {
               // Skip invalid JSON
-              continue;
             }
           }
-        }
+        });
       }
 
     } catch (error) {
@@ -136,9 +138,9 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
       }
 
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: `❌ Sorry, I couldn't get a response. ${error.message === 'Failed to fetch' ? 'Make sure the backend server is running.' : error.message}` 
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Sorry, I couldn't get a response. ${error.message === 'Failed to fetch' ? 'Make sure the backend server is running.' : error.message}`
       }]);
       setStreamingMessage('');
     } finally {
@@ -169,8 +171,8 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
       {/* Header */}
-      <div 
-        className="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-700 dark:to-green-800 p-4 flex justify-between items-center cursor-pointer"
+      <div
+        className="bg-gradient-to-r from-green-600 to-green-700 dark:from-emerald-600 dark:to-emerald-700 p-4 flex justify-between items-center cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-3">
@@ -198,17 +200,16 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                    message.role === 'user'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700'
-                  }`}
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700'
+                    }`}
                 >
                   <p className="whitespace-pre-wrap">{message.content}</p>
                 </div>
               </div>
             ))}
-            
+
             {/* Streaming Message */}
             {streamingMessage && (
               <div className="flex justify-start">
@@ -218,7 +219,7 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
                 </div>
               </div>
             )}
-            
+
             {/* Loading Indicator (only when waiting for first response) */}
             {loading && !streamingMessage && (
               <div className="flex justify-start">
@@ -231,7 +232,7 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -244,7 +245,7 @@ const RecipeChatbot = ({ initiallyExpanded = false }) => {
                   <button
                     key={index}
                     onClick={() => handleSuggestedQuestion(question)}
-                    className="text-left text-sm bg-gray-100 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-green-900/30 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg transition"
+                    className="text-left text-sm bg-gray-100 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-emerald-900/30 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg transition"
                   >
                     💡 {question}
                   </button>

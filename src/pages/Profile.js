@@ -14,7 +14,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('recipes');
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-  
+
   useEffect(() => {
     if (location.state && location.state.activeTab) {
       setActiveTab(location.state.activeTab);
@@ -36,7 +36,7 @@ function Profile() {
   const fetchUserData = async (userId) => {
     try {
       setLoading(true);
-      
+
       const recipesQuery = query(
         collection(db, 'recipes'),
         where('authorId', '==', userId)
@@ -85,7 +85,7 @@ function Profile() {
 
       if (remixes.length > 0) {
         const firstRemix = remixes[0];
-        
+
         for (let i = 1; i < remixes.length; i++) {
           const remixRef = doc(db, 'recipes', remixes[i].id);
           await updateDoc(remixRef, {
@@ -133,11 +133,11 @@ function Profile() {
 
   if (!user) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+      <div className="flex flex-col justify-center items-center h-screen bg-slate-50 dark:bg-gray-900">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
           Please login to view your profile
         </h2>
-        <Link to="/login" className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+        <Link to="/login" className="bg-gradient-to-r from-coral-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-coral-600 hover:to-pink-600">
           Login
         </Link>
       </div>
@@ -145,37 +145,37 @@ function Profile() {
   }
 
   return (
-    <div className="min-h-screen dark:bg-gray-900 mx-auto p-6 transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 mx-auto p-6 transition-colors duration-200">
       {/* Profile Header */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md p-4 sm:p-8 mb-6">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-4 sm:p-8 mb-6 border border-white/50 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <img
             src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=random&size=200`}
             alt={user.displayName || 'User'}
-            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-green-500 dark:border-green-600"
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-coral-500 dark:border-red-400"
             onError={(e) => {
               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=random&size=200`;
             }}
           />
           <div className="flex-1 text-center sm:text-left w-full">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-300">
+            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-coral-500 via-sunny-400 to-ocean-500 bg-clip-text text-transparent">
               {user.displayName || 'User'}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm sm:text-base break-all">{user.email}</p>
             <div className="flex gap-2 sm:gap-4 mt-4 text-sm justify-center sm:justify-start">
-              <div className="bg-green-50 dark:bg-green-800 px-3 sm:px-4 py-2 rounded-lg">
-                <span className="font-semibold text-green-700 dark:text-green-200">{userRecipes.length}</span>
+              <div className="bg-coral-50 dark:bg-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-coral-200 dark:border-red-400/30">
+                <span className="font-semibold text-coral-600 dark:text-coral-400">{userRecipes.length}</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-1">Recipes</span>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-700 px-3 sm:px-4 py-2 rounded-lg">
-                <span className="font-semibold text-blue-700 dark:text-blue-200">{favoriteRecipes.length}</span>
+              <div className="bg-ocean-50 dark:bg-gray-800 px-3 sm:px-4 py-2 rounded-lg border border-ocean-200 dark:border-cyan-400/30">
+                <span className="font-semibold text-ocean-600 dark:text-cyan-400">{favoriteRecipes.length}</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-1">Favorites</span>
               </div>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:bg-red-600 transition text-sm sm:text-base w-full sm:w-auto"
+            className="bg-coral-500 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:bg-coral-600 transition text-sm sm:text-base w-full sm:w-auto"
           >
             Logout
           </button>
@@ -186,21 +186,19 @@ function Profile() {
       <div className="flex gap-2 mb-6 overflow-x-auto">
         <button
           onClick={() => setActiveTab('recipes')}
-          className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition whitespace-nowrap text-sm sm:text-base ${
-            activeTab === 'recipes'
-              ? 'bg-green-600 dark:bg-green-700 text-white'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-          }`}
+          className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition whitespace-nowrap text-sm sm:text-base ${activeTab === 'recipes'
+            ? 'bg-gradient-to-r from-coral-500 to-pink-500 text-white shadow-lg'
+            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
         >
           My Recipes ({userRecipes.length})
         </button>
         <button
           onClick={() => setActiveTab('favorites')}
-          className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition whitespace-nowrap text-sm sm:text-base ${
-            activeTab === 'favorites'
-              ? 'bg-green-600 dark:bg-green-700 text-white'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-          }`}
+          className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition whitespace-nowrap text-sm sm:text-base ${activeTab === 'favorites'
+            ? 'bg-gradient-to-r from-ocean-500 to-mint-500 text-white shadow-lg'
+            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
         >
           Favorites ({favoriteRecipes.length})
         </button>
@@ -218,20 +216,20 @@ function Profile() {
                   </Link>
                   <div className="p-3 sm:p-4 flex flex-col flex-1">
                     <Link to={`/recipe/${recipe.id}`}>
-                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-green-600 dark:hover:text-green-500 line-clamp-2 min-h-[3rem] sm:min-h-[3.5rem]">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-ocean-500 dark:hover:text-cyan-400 line-clamp-2 min-h-[3rem] sm:min-h-[3.5rem]">
                         {recipe.name}
                       </h3>
                     </Link>
                     <div className="flex-1 mb-3">
                       <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
-                        {expandedDescriptions[recipe.id] 
-                          ? recipe.description 
+                        {expandedDescriptions[recipe.id]
+                          ? recipe.description
                           : truncateText(recipe.description, 100)}
                       </p>
                       {recipe.description && recipe.description.length > 100 && (
                         <button
                           onClick={() => toggleDescription(recipe.id)}
-                          className="text-green-600 dark:text-green-500 text-xs sm:text-sm mt-1 hover:underline"
+                          className="text-ocean-500 dark:text-cyan-400 text-xs sm:text-sm mt-1 hover:underline"
                         >
                           {expandedDescriptions[recipe.id] ? 'Read less' : 'Read more'}
                         </button>
@@ -240,13 +238,13 @@ function Profile() {
                     <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-auto">
                       <Link
                         to={`/recipe/${recipe.id}`}
-                        className="bg-green-600 text-white text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-green-700 transition text-xs sm:text-sm"
+                        className="bg-ocean-500 text-white text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-ocean-600 transition text-xs sm:text-sm"
                       >
                         View
                       </Link>
                       <Link
                         to={`/recipe/edit/${recipe.id}`}
-                        className="bg-blue-500 text-white text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-blue-600 transition text-xs sm:text-sm"
+                        className="bg-sunny-500 text-white text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-sunny-600 transition text-xs sm:text-sm"
                       >
                         Edit
                       </Link>
@@ -266,7 +264,7 @@ function Profile() {
               <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-4 px-4">You haven't created any recipes yet</p>
               <Link
                 to="/recipe/new"
-                className="inline-block bg-green-600 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:bg-green-700 transition text-sm sm:text-base"
+                className="inline-block bg-gradient-to-r from-coral-500 to-pink-500 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:from-coral-600 hover:to-pink-600 transition text-sm sm:text-base"
               >
                 Create Your First Recipe
               </Link>
@@ -286,20 +284,20 @@ function Profile() {
                   </Link>
                   <div className="p-3 sm:p-4 flex flex-col flex-1">
                     <Link to={`/recipe/${recipe.id}`}>
-                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-green-600 dark:hover:text-green-500 line-clamp-2 min-h-[3rem] sm:min-h-[3.5rem]">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 hover:text-ocean-500 dark:hover:text-cyan-400 line-clamp-2 min-h-[3rem] sm:min-h-[3.5rem]">
                         {recipe.name}
                       </h3>
                     </Link>
                     <div className="flex-1">
                       <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
-                        {expandedDescriptions[recipe.id] 
-                          ? recipe.description 
+                        {expandedDescriptions[recipe.id]
+                          ? recipe.description
                           : truncateText(recipe.description, 100)}
                       </p>
                       {recipe.description && recipe.description.length > 100 && (
                         <button
                           onClick={() => toggleDescription(recipe.id)}
-                          className="text-green-600 dark:text-green-500 text-xs sm:text-sm mt-1 hover:underline"
+                          className="text-ocean-500 dark:text-cyan-400 text-xs sm:text-sm mt-1 hover:underline"
                         >
                           {expandedDescriptions[recipe.id] ? 'Read less' : 'Read more'}
                         </button>
@@ -317,7 +315,7 @@ function Profile() {
               <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-4 px-4">You haven't favorited any recipes yet</p>
               <Link
                 to="/recipes"
-                className="inline-block bg-green-600 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:bg-green-700 transition text-sm sm:text-base"
+                className="inline-block bg-gradient-to-r from-ocean-500 to-mint-500 text-white px-6 py-2.5 sm:py-3 rounded-lg hover:from-ocean-600 hover:to-mint-600 transition text-sm sm:text-base"
               >
                 Browse Recipes
               </Link>

@@ -182,10 +182,10 @@ function AddRecipe() {
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900">
+        <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 <div className="mb-6 sm:mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-green-700 dark:text-green-500 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-coral-500 via-sunny-400 to-ocean-500 bg-clip-text text-transparent mb-2 pb-1">
                         Create New Recipe
                     </h1>
                     <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
@@ -206,7 +206,7 @@ function AddRecipe() {
                             Recipe Name *
                         </label>
                         <input
-                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             type="text"
                             placeholder="e.g., Grandma's Chocolate Chip Cookies"
                             value={recipe.name}
@@ -221,7 +221,7 @@ function AddRecipe() {
                             Description *
                         </label>
                         <textarea
-                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             rows="3"
                             placeholder="A brief description of your recipe..."
                             value={recipe.description}
@@ -237,7 +237,7 @@ function AddRecipe() {
                                 Category
                             </label>
                             <select
-                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 value={recipe.category}
                                 onChange={(e) => setRecipe({ ...recipe, category: e.target.value })}
                             >
@@ -255,7 +255,7 @@ function AddRecipe() {
                                 Prep Time
                             </label>
                             <input
-                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 type="text"
                                 placeholder="e.g., 30 mins"
                                 value={recipe.prepTime}
@@ -267,7 +267,7 @@ function AddRecipe() {
                                 Servings
                             </label>
                             <input
-                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 type="text"
                                 placeholder="e.g., 4 people"
                                 value={recipe.servings}
@@ -291,13 +291,13 @@ function AddRecipe() {
                                             placeholder={`Image ${index + 1} URL`}
                                             value={image}
                                             onChange={(e) => handleImageChange(index, e.target.value)}
-                                            className="flex-1 p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            className="flex-1 p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                                         />
 
                                         {/* File input with better styling */}
                                         <div className="flex gap-2">
                                             <label className="flex-1 sm:flex-none cursor-pointer">
-                                                <div className="px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium text-sm sm:text-base transition text-center">
+                                                <div className="px-4 py-3 bg-gradient-to-r from-ocean-500 to-mint-500 hover:from-ocean-600 hover:to-mint-600 text-white rounded-lg font-medium text-sm sm:text-base transition text-center">
                                                     Choose File
                                                 </div>
                                                 <input
@@ -322,9 +322,9 @@ function AddRecipe() {
                                     {/* Preview if image exists */}
                                     {image && (
                                         <div className="mt-3">
-                                            <img 
-                                                src={image} 
-                                                alt={`Preview ${index + 1}`} 
+                                            <img
+                                                src={image}
+                                                alt={`Preview ${index + 1}`}
                                                 className="w-full sm:w-48 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
                                                 onError={(e) => e.target.style.display = 'none'}
                                             />
@@ -336,7 +336,7 @@ function AddRecipe() {
                         <button
                             type="button"
                             onClick={addImageField}
-                            className="mt-3 text-sm sm:text-base text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 font-semibold"
+                            className="mt-3 text-sm sm:text-base text-ocean-500 dark:text-cyan-400 hover:text-ocean-600 dark:hover:text-cyan-300 font-semibold"
                         >
                             + Add Another Image
                         </button>
@@ -364,7 +364,7 @@ function AddRecipe() {
                                         ☰
                                     </div>
                                     <input
-                                        className="flex-1 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                        className="flex-1 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                         type="text"
                                         placeholder="Ingredient name"
                                         value={ingredient.name}
@@ -373,14 +373,14 @@ function AddRecipe() {
                                     />
                                     <div className="flex gap-2">
                                         <input
-                                            className="w-20 sm:w-24 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                            className="w-20 sm:w-24 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                             type="text"
                                             placeholder="Amount"
                                             value={ingredient.quantity}
                                             onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                                         />
                                         <select
-                                            className="flex-1 sm:w-28 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                            className="flex-1 sm:w-28 p-2.5 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                             value={ingredient.unit}
                                             onChange={(e) => handleIngredientChange(index, 'unit', e.target.value)}
                                         >
@@ -404,7 +404,7 @@ function AddRecipe() {
                         <button
                             type="button"
                             onClick={addIngredientField}
-                            className="mt-2 text-sm sm:text-base text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 font-semibold"
+                            className="mt-2 text-sm sm:text-base text-ocean-500 dark:text-cyan-400 hover:text-ocean-600 dark:hover:text-cyan-300 font-semibold"
                         >
                             + Add Ingredient
                         </button>
@@ -416,7 +416,7 @@ function AddRecipe() {
                             Instructions *
                         </label>
                         <textarea
-                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            className="w-full p-2.5 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             rows="8"
                             placeholder="Step-by-step instructions for your recipe..."
                             value={recipe.instructions}
@@ -430,7 +430,7 @@ function AddRecipe() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
+                            className="flex-1 bg-gradient-to-r from-coral-500 to-pink-500 hover:from-coral-600 hover:to-pink-600 text-white py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg transition disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed shadow-lg"
                         >
                             {loading ? 'Creating Recipe...' : '✨ Create Recipe'}
                         </button>

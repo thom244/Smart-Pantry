@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 const RecipeCard = ({ recipe }) => {
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1">
       {recipe.image ? (
-        <img 
-          src={recipe.image} 
-          alt={recipe.name} 
+        <img
+          src={recipe.image}
+          alt={recipe.name}
           className="w-full h-48 object-cover"
         />
       ) : (
@@ -22,9 +22,9 @@ const RecipeCard = ({ recipe }) => {
         <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
           {recipe.description}
         </p>
-        <Link 
+        <Link
           to={`/recipe/${recipe.id}`}
-          className="inline-flex items-center text-green-600 dark:text-green-500 font-semibold hover:text-green-700 dark:hover:text-green-400"
+          className="inline-flex items-center text-green-600 dark:text-emerald-400 font-semibold hover:text-green-700 dark:hover:text-emerald-300"
         >
           View Recipe →
         </Link>

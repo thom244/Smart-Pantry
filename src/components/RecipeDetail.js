@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link} from 'react-router-dom';
-import { 
-  doc, getDoc, collection, addDoc, getDocs, 
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import {
+  doc, getDoc, collection, addDoc, getDocs,
   query, where, orderBy, updateDoc, arrayUnion, arrayRemove
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
@@ -165,7 +165,7 @@ function RecipeDetail() {
 
     try {
       const docRef = doc(db, 'recipes', id);
-      
+
       if (newIsFavoriteStatus) {
         await updateDoc(docRef, { favoritedBy: arrayUnion(user.uid) });
       } else {
@@ -198,19 +198,18 @@ function RecipeDetail() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-        
+
         {/* Header with Title and Favorite */}
         <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
           <div className="flex justify-between items-start gap-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400 flex-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 dark:text-emerald-400 flex-1">
               {recipe.name}
             </h1>
             {user && (
               <button
                 onClick={handleFavorite}
-                className={`text-3xl sm:text-4xl transition flex-shrink-0 ${
-                  isFavorite ? 'text-red-500' : 'text-gray-300 dark:text-gray-600'
-                } hover:text-red-400 hover:scale-110`}
+                className={`text-3xl sm:text-4xl transition flex-shrink-0 ${isFavorite ? 'text-red-500' : 'text-gray-300 dark:text-gray-600'
+                  } hover:text-red-400 hover:scale-110`}
                 title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
                 {isFavorite ? '❤️' : '🤍'}
@@ -249,8 +248,8 @@ function RecipeDetail() {
         <div className="relative rounded-xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
           {images.length > 0 ? (
             <>
-              <img 
-                src={images[currentImageIndex]} 
+              <img
+                src={images[currentImageIndex]}
                 alt={recipe.name}
                 className="w-full h-64 sm:h-96 object-cover"
                 onError={(e) => {
@@ -272,16 +271,15 @@ function RecipeDetail() {
                   >
                     ›
                   </button>
-                  
+
                   {/* Dots */}
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
                     {images.map((_, idx) => (
                       <button
                         key={idx}
                         onClick={() => setCurrentImageIndex(idx)}
-                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition ${
-                          idx === currentImageIndex ? 'bg-green-500 scale-125' : 'bg-gray-300 hover:bg-gray-400'
-                        }`}
+                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition ${idx === currentImageIndex ? 'bg-green-500 scale-125' : 'bg-gray-300 hover:bg-gray-400'
+                          }`}
                       />
                     ))}
                   </div>
@@ -304,9 +302,8 @@ function RecipeDetail() {
                 <button
                   key={star}
                   onClick={() => handleRating(star)}
-                  className={`text-2xl sm:text-3xl ${
-                    star <= (userRating || 0) ? 'text-yellow-500' : 'text-gray-300 dark:text-gray-600'
-                  } hover:text-yellow-400 transition transform hover:scale-110`}
+                  className={`text-2xl sm:text-3xl ${star <= (userRating || 0) ? 'text-yellow-500' : 'text-gray-300 dark:text-gray-600'
+                    } hover:text-yellow-400 transition transform hover:scale-110`}
                 >
                   ★
                 </button>
@@ -323,7 +320,7 @@ function RecipeDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Ingredients */}
           <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-green-400 flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-emerald-400 flex items-center gap-2">
               <span>🥗</span>
               <span>Ingredients</span>
             </h2>
@@ -336,10 +333,10 @@ function RecipeDetail() {
               ))}
             </ul>
           </div>
-          
+
           {/* Instructions */}
           <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-green-400 flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-emerald-400 flex items-center gap-2">
               <span>👨‍🍳</span>
               <span>Instructions</span>
             </h2>
@@ -364,14 +361,14 @@ function RecipeDetail() {
         {showRemix && (
           <div className="bg-gray-50 dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md border-2 border-green-500">
             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Create Your Remix</h3>
-            <RecipeForm 
-              defaultRecipe={recipe} 
+            <RecipeForm
+              defaultRecipe={recipe}
               isRemix={true}
               originalRecipeId={id}
               onSave={() => {
                 setShowRemix(false);
                 fetchRemixes();
-              }} 
+              }}
             />
           </div>
         )}
@@ -379,7 +376,7 @@ function RecipeDetail() {
         {/* Community Remixes */}
         {remixes.length > 0 && (
           <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-green-400">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-emerald-400">
               🎨 Community Remixes ({remixes.length})
             </h2>
 
@@ -399,7 +396,7 @@ function RecipeDetail() {
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
                         {remix.description}
                       </p>
-                      <p className="text-xs text-green-600 dark:text-green-400">
+                      <p className="text-xs text-green-600 dark:text-emerald-400">
                         by {remix.authorName || remix.author?.split('@')[0] || 'Anonymous'}
                       </p>
                     </div>
@@ -412,7 +409,7 @@ function RecipeDetail() {
 
         {/* Comments */}
         <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
-          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-green-400">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-green-600 dark:text-emerald-400">
             💬 Comments ({comments.length})
           </h2>
 
@@ -445,7 +442,7 @@ function RecipeDetail() {
           ) : (
             <div className="text-center py-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
               <p className="text-gray-600 dark:text-gray-300 mb-3">Please login to comment</p>
-              <Link 
+              <Link
                 to="/login"
                 className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
               >

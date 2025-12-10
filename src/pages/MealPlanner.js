@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, setDoc, getDoc, query, orderBy, limit } from 'firebase/firestore';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RecipeImage from '../components/RecipeImage';
 
-const CATEGORY_TO_MEALTYPE = {
-  breakfast: ["Breakfast"],
-  lunch: ["Lunch"],
-  dinner: ["Dinner"],
-  dessert: ["Dinner", "Snack"],
-  snack: ["Snack"],
-  main: ["Lunch", "Dinner"],
-  side: ["Lunch", "Dinner"]
-};
+
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -62,8 +54,8 @@ function MealPlanner() {
   const [showShoppingList, setShowShoppingList] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [editMode, setEditMode] = useState(false);
-  const navigate = useNavigate();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -219,7 +211,7 @@ function MealPlanner() {
 
   if (!user) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-sunny-50 via-ocean-50 to-berry-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-sunny-50 via-ocean-50 to-berry-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
         <div className="text-6xl mb-4">📅</div>
         <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
           Please login to use Meal Planner
@@ -232,7 +224,7 @@ function MealPlanner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sunny-50 via-ocean-50 to-berry-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-6">
+    <div className={`min-h-screen pb-24 bg-slate-50 dark:bg-gray-900 ${!user ? 'flex items-center justify-center' : ''}`}>
       <div className="max-w-[1800px] mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -251,7 +243,7 @@ function MealPlanner() {
             {/* Stats */}
             <div className="flex-1 min-w-[200px]">
               <div className="flex items-center gap-6">
-                <div className="bg-coral-50 dark:bg-gray-700 border border-coral-200 dark:border-coral-800 px-6 py-3 rounded-lg">
+                <div className="bg-coral-50 dark:bg-gray-800 border border-coral-200 dark:border-red-400/30 px-6 py-3 rounded-lg">
                   <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
                     Planned Meals
                   </div>
@@ -259,11 +251,11 @@ function MealPlanner() {
                     {getTotalRecipes()}
                   </div>
                 </div>
-                <div className="bg-ocean-50 dark:bg-gray-700 border border-ocean-200 dark:border-ocean-800 px-6 py-3 rounded-lg">
+                <div className="bg-ocean-50 dark:bg-gray-800 border border-ocean-200 dark:border-cyan-400/30 px-6 py-3 rounded-lg">
                   <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
                     This Week
                   </div>
-                  <div className="text-3xl font-bold text-ocean-500 dark:text-ocean-400">
+                  <div className="text-3xl font-bold text-ocean-500 dark:text-cyan-400">
                     {DAYS_OF_WEEK.length}
                   </div>
                 </div>
@@ -382,7 +374,7 @@ function MealPlanner() {
                             {editMode && (
                               <button
                                 onClick={() => openRecipeSelector(day, mealType)}
-                                className="w-full bg-white dark:bg-gray-700 hover:bg-ocean-50 dark:hover:bg-ocean-900/30 border-2 border-dashed border-ocean-300 dark:border-ocean-700 hover:border-ocean-500 dark:hover:border-ocean-500 text-ocean-600 dark:text-ocean-400 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                                className="w-full bg-white dark:bg-gray-700 hover:bg-ocean-50 dark:hover:bg-gray-600 border-2 border-dashed border-cyan-300 dark:border-cyan-700 hover:border-cyan-500 dark:hover:border-cyan-500 text-cyan-600 dark:text-cyan-400 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
                               >
                                 <span className="text-lg">+</span>
                                 <span>Add Recipe</span>
@@ -459,7 +451,7 @@ function MealPlanner() {
                         {editMode && (
                           <button
                             onClick={() => openRecipeSelector(day, mealType)}
-                            className="w-full bg-ocean-50 dark:bg-ocean-900/30 border-2 border-dashed border-ocean-300 dark:border-ocean-700 text-ocean-600 dark:text-ocean-400 py-2 rounded-lg text-sm font-semibold"
+                            className="w-full bg-ocean-50 dark:bg-gray-700 border-2 border-dashed border-cyan-300 dark:border-cyan-700 text-cyan-600 dark:text-cyan-400 py-2 rounded-lg text-sm font-semibold"
                           >
                             + Add Recipe
                           </button>
@@ -557,7 +549,7 @@ function MealPlanner() {
         {/* Recipe Selector Modal */}
         {showRecipeSelector && selectedSlot && (
           <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-start z-50 p-4 overflow-auto backdrop-blur-sm">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden mt-12">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[85vh] overflow-hidden mt-8 mb-8 flex flex-col">
               <div className="bg-gradient-to-r from-ocean-500 to-mint-500 dark:from-ocean-600 dark:to-mint-600 p-6">
                 <h2 className="text-3xl font-bold text-white mb-2">
                   Add Recipe
@@ -567,7 +559,7 @@ function MealPlanner() {
                 </p>
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex-1 overflow-hidden flex flex-col">
                 {/* Search & Filter */}
                 <div className="flex flex-col md:flex-row gap-3 mb-6">
                   <input
@@ -594,7 +586,7 @@ function MealPlanner() {
                 </div>
 
                 {/* Recipe Grid */}
-                <div className="overflow-y-auto max-h-[60vh]">
+                <div className="overflow-y-auto flex-1 min-h-0">
                   {filteredRecipes.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {filteredRecipes.map(recipe => (
@@ -634,10 +626,10 @@ function MealPlanner() {
                   )}
                 </div>
 
-                <div className="mt-4 flex gap-3">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex gap-3 flex-shrink-0">
                   <Link
                     to="/recipes/new"
-                    className="ml-auto bg-white dark:bg-gray-700 hover:bg-ocean-50 dark:hover:bg-ocean-900/30 border-2 border-dashed border-ocean-300 dark:border-ocean-700 text-ocean-600 dark:text-ocean-400 py-2 px-4 rounded-xl text-sm font-semibold"
+                    className="ml-auto bg-white dark:bg-gray-700 hover:bg-ocean-50 dark:hover:bg-gray-600 border-2 border-dashed border-cyan-300 dark:border-cyan-700 text-cyan-600 dark:text-cyan-400 py-2 px-4 rounded-xl text-sm font-semibold"
                     onClick={() => {
                       setShowRecipeSelector(false);
                       setSelectedSlot(null);

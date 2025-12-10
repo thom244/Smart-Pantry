@@ -33,7 +33,7 @@ function Navbar() {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     localStorage.setItem('darkMode', newDarkMode.toString());
-    
+
     if (newDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -69,7 +69,7 @@ function Navbar() {
     return (
       <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-          <Link to="/" className="text-2xl font-bold text-green-600 dark:text-green-500">
+          <Link to="/" className="text-2xl font-bold text-coral-500 dark:text-coral-400">
             Smart Pantry
           </Link>
         </div>
@@ -78,50 +78,50 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors">
+    <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors border-b-4 border-transparent" style={{ borderImage: 'linear-gradient(to right, #ff6b6b, #feca57, #48dbfb, #ff9ff3) 1' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
-            className="text-2xl font-bold text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 transition"
+          <Link
+            to="/"
+            className="text-2xl font-bold text-coral-500 dark:text-coral-400 hover:text-coral-600 dark:hover:text-coral-300 transition"
             onClick={closeMobileMenu}
           >
             🍳 Smart Pantry
           </Link>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
-            <Link to="/" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+            <Link to="/" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
               Home
             </Link>
-            <Link to="/recipes" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+            <Link to="/recipes" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
               Recipes
             </Link>
             {user && (
               <>
-                <Link to="/pantry" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+                <Link to="/pantry" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
                   My Pantry
                 </Link>
-                <Link to="/meal-planner" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+                <Link to="/meal-planner" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
                   Meal Planner
                 </Link>
-                <Link to="/add-recipe" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+                <Link to="/add-recipe" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
                   Create
                 </Link>
-                <Link to="/import-recipe" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+                <Link to="/import-recipe" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
                   Import
                 </Link>
-                <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition font-medium">
+                <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition font-medium">
                   Profile
                 </Link>
               </>
             )}
-            
+
             {/* Search Button */}
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition p-2"
+              className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition p-2"
               aria-label="Search"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@ function Navbar() {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition p-2"
+              className="text-gray-700 dark:text-gray-200 hover:text-sunny-500 dark:hover:text-yellow-400 transition p-2"
               aria-label="Toggle dark mode"
             >
               {darkMode ? (
@@ -153,22 +153,22 @@ function Navbar() {
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium"
+                  className="bg-coral-500 hover:bg-coral-600 text-white px-4 py-2 rounded-lg transition font-medium shadow-md"
                 >
                   Logout
                 </button>
               </div>
             ) : (
               <div className="flex items-center space-x-2">
-                <Link 
-                  to="/login" 
-                  className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition px-4 py-2 font-medium"
+                <Link
+                  to="/login"
+                  className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition px-4 py-2 font-medium"
                 >
                   Login
                 </Link>
-                <Link 
-                  to="/register" 
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-medium"
+                <Link
+                  to="/register"
+                  className="bg-gradient-to-r from-coral-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-coral-600 hover:to-pink-600 transition font-medium shadow-md"
                 >
                   Register
                 </Link>
@@ -181,7 +181,7 @@ function Navbar() {
             {/* Search Button */}
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition p-2"
+              className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 transition p-2"
               aria-label="Search"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,7 +192,7 @@ function Navbar() {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition p-2"
+              className="text-gray-700 dark:text-gray-200 hover:text-sunny-500 dark:hover:text-yellow-400 transition p-2"
               aria-label="Toggle dark mode"
             >
               {darkMode ? (
@@ -209,7 +209,7 @@ function Navbar() {
             {/* Hamburger Menu */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition p-2"
+              className="text-gray-700 dark:text-gray-200 hover:text-coral-500 dark:hover:text-red-400 transition p-2"
               aria-label="Menu"
             >
               {mobileMenuOpen ? (
@@ -234,12 +234,12 @@ function Navbar() {
                 placeholder="Search recipes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:bg-gray-700 dark:text-white"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 dark:bg-gray-700 dark:text-white"
                 autoFocus
               />
               <button
                 type="submit"
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition font-medium"
+                className="bg-ocean-500 hover:bg-ocean-600 text-white px-6 py-2 rounded-lg transition font-medium"
               >
                 Search
               </button>
@@ -251,84 +251,84 @@ function Navbar() {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-4">
             <div className="flex flex-col space-y-3">
-              <Link 
-                to="/" 
-                className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+              <Link
+                to="/"
+                className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                 onClick={closeMobileMenu}
               >
                 Home
               </Link>
-              <Link 
-                to="/recipes" 
-                className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+              <Link
+                to="/recipes"
+                className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                 onClick={closeMobileMenu}
               >
                 Recipes
               </Link>
               {user && (
                 <>
-                  <Link 
-                    to="/pantry" 
-                    className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/pantry"
+                    className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     My Pantry
                   </Link>
-                  <Link 
-                    to="/meal-planner" 
-                    className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/meal-planner"
+                    className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     Meal Planner
                   </Link>
-                  <Link 
-                    to="/add-recipe" 
-                    className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/add-recipe"
+                    className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     Create Recipe
                   </Link>
-                  <Link 
-                    to="/import-recipe" 
-                    className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/import-recipe"
+                    className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     Import Recipe
                   </Link>
-                  <Link 
-                    to="/profile" 
-                    className="text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/profile"
+                    className="text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     Profile
                   </Link>
-                  
+
                   <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
                     <div className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
                       Signed in as <span className="font-semibold text-gray-900 dark:text-white">{user.displayName || user.email?.split('@')[0]}</span>
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition px-4 py-2 rounded-lg font-medium"
+                      className="w-full text-left text-coral-600 dark:text-red-400 hover:bg-coral-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     >
                       Logout
                     </button>
                   </div>
                 </>
               )}
-              
+
               {!user && (
                 <div className="flex flex-col space-y-2 pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <Link 
-                    to="/login" 
-                    className="text-center text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
+                  <Link
+                    to="/login"
+                    className="text-center text-gray-700 dark:text-gray-200 hover:text-ocean-500 dark:hover:text-cyan-400 hover:bg-ocean-50 dark:hover:bg-gray-700 transition px-4 py-2 rounded-lg font-medium"
                     onClick={closeMobileMenu}
                   >
                     Login
                   </Link>
-                  <Link 
-                    to="/register" 
-                    className="text-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-medium"
+                  <Link
+                    to="/register"
+                    className="text-center bg-gradient-to-r from-coral-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-coral-600 hover:to-pink-600 transition font-medium"
                     onClick={closeMobileMenu}
                   >
                     Register

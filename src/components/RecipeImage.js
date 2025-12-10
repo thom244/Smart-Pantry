@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const RecipeImage = ({ recipe, className = "w-full h-48", showBadge = false }) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const getImagePlaceholder = (category) => {
     const emojis = {
       breakfast: '🥞',
@@ -11,47 +14,49 @@ const RecipeImage = ({ recipe, className = "w-full h-48", showBadge = false }) =
       main: '🍲',
       side: '🥘'
     };
-    return emojis[category] || '🍳';
+    const cat = category?.toLowerCase() || '';
+    return emojis[cat] || '🍳';
   };
 
+  // Rainbow color palette for categories
   const getCategoryColor = (category) => {
+    const cat = category?.toLowerCase() || '';
     const colors = {
-  breakfast: 'from-yellow-400 to-orange-500 dark:from-yellow-400 dark:to-orange-500',
-  lunch: 'from-green-400 to-green-600 dark:from-green-500 dark:to-green-300',
-  dinner: 'from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-300',
-  dessert: 'from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-300',
-  snack: 'from-purple-400 to-purple-600 dark:from-purple-500 dark:to-purple-300',
-  main: 'from-red-400 to-red-600 dark:from-red-500 dark:to-red-300',
-  side: 'from-teal-400 to-teal-600 dark:from-teal-500 dark:to-teal-300'
+      breakfast: 'from-sunny-400 to-sunny-600 dark:from-sunny-500 dark:to-sunny-700',
+      lunch: 'from-ocean-400 to-ocean-600 dark:from-ocean-500 dark:to-ocean-700',
+      dinner: 'from-berry-400 to-berry-600 dark:from-berry-500 dark:to-berry-700',
+      dessert: 'from-coral-400 to-coral-600 dark:from-coral-500 dark:to-coral-700',
+      snack: 'from-mint-400 to-mint-600 dark:from-mint-500 dark:to-mint-600',
+      main: 'from-coral-400 to-berry-500 dark:from-coral-500 dark:to-berry-600',
+      side: 'from-ocean-400 to-mint-500 dark:from-ocean-500 dark:to-mint-600'
     };
-    return colors[category] || 'from-green-400 to-green-600 dark:from-green-700 dark:to-green-900';
+    return colors[cat] || 'from-coral-400 to-sunny-500 dark:from-coral-500 dark:to-sunny-600';
   };
+
+
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {recipe.imageUrl ? (
-        <img 
-          src={recipe.imageUrl} 
-          alt={recipe.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // If image fails to load, show placeholder
-            e.target.style.display = 'none';
-            e.target.nextElementSibling.style.display = 'flex';
-          }}
+      {/* Actual image - only rendered when there's a URL and no error */}
+      {recipe?.imageUrl && !imageError && (
+        <img
+          src={recipe.imageUrl}
+          alt={recipe.name || 'Recipe'}
+          className={`w-full h-full object-cover absolute inset-0 z-10 ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageError(true)}
         />
-      ) : null}
-      
-      {/* Fallback placeholder - shown if no imageUrl or if image fails to load */}
-      <div 
-        className={`w-full h-full bg-gradient-to-br ${getCategoryColor(recipe.category)} flex items-center justify-center ${recipe.imageUrl ? 'hidden' : 'flex'}`}
-        style={{ display: recipe.imageUrl ? 'none' : 'flex' }}
+      )}
+
+      {/* Fallback placeholder - always rendered as background */}
+      <div
+        className={`w-full h-full bg-gradient-to-br ${getCategoryColor(recipe?.category)} flex items-center justify-center`}
       >
-        <span className="text-7xl">{getImagePlaceholder(recipe.category)}</span>
+        <span className="text-7xl drop-shadow-lg">{getImagePlaceholder(recipe?.category)}</span>
       </div>
 
-      {showBadge && recipe.isRemix && (
-  <span className="absolute top-2 right-2 bg-blue-500 dark:bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow-lg">
+      {showBadge && recipe?.isRemix && (
+        <span className="absolute top-2 right-2 bg-gradient-to-r from-ocean-500 to-mint-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow-lg z-20">
           Remix
         </span>
       )}

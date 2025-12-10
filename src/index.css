@@ -2,3 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+
+  /* Hide scrollbar for horizontal scroll sections */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Rainbow gradient backgrounds */
+  .bg-gradient-rainbow {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 25%, #48dbfb 50%, #ff9ff3 75%, #54a0ff 100%);
+  }
+
+  .bg-gradient-sunset {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9f43 100%);
+  }
+
+  .bg-gradient-ocean {
+    background: linear-gradient(135deg, #48dbfb 0%, #0abde3 50%, #10ac84 100%);
+  }
+
+  .bg-gradient-candy {
+    background: linear-gradient(135deg, #ff9ff3 0%, #f368e0 50%, #ff6b6b 100%);
+  }
+
+  .bg-gradient-fresh {
+    background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 50%, #48dbfb 100%);
+  }
+
+  /* Colorful shadows */
+  .shadow-coral {
+    box-shadow: 0 10px 40px -10px rgba(255, 107, 107, 0.4);
+  }
+
+  .shadow-ocean {
+    box-shadow: 0 10px 40px -10px rgba(72, 219, 251, 0.4);
+  }
+
+  .shadow-sunny {
+    box-shadow: 0 10px 40px -10px rgba(254, 202, 87, 0.4);
+  }
+
+  /* Text gradients */
+  .text-gradient-rainbow {
+    background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Dark mode scrollbar styling */
+.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+  /* gray-700 */
+  border-radius: 5px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+  /* gray-500 */
+  border-radius: 5px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+  /* gray-400 */
+}
+
+/* Firefox dark mode scrollbar */
+.dark * {
+  scrollbar-color: #6b7280 #374151;
+  scrollbar-width: thin;
+}
+
+/* Smooth color transitions for theme switching */
+* {
+  transition-property: background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Override for elements that need instant changes */
+button,
+a,
+input,
+select,
+textarea {
+  transition-property: background-color, border-color, color, box-shadow, transform;
+  transition-duration: 200ms;
+}
